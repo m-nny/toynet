@@ -2,8 +2,9 @@ const path = require('path');
 
 module.exports = {
   "roots": [
-    "lib"
+    "src"
   ],
   "transform": {
+    "^.+\\.tsx?$": "ts-jest"
   }
 }
