@@ -47,7 +47,7 @@ class Matrix {
     return a.copy().zip(b, func);
   }
   randomize() {
-    this.map(_ => Math.floor(Math.random() * 10 - 5));
+    this.map(_ => Math.floor(Math.random() * 2 - 1));
   }
   add(other: Matrix | number): Matrix {
     if (other instanceof Matrix) {
