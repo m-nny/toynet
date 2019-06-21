@@ -415,3 +415,106 @@ test('Matrix to array', () => {
   a.add(10);
   expect(b).toEqual(mapped_data);
 });
+
+test('Chaining matrix methods', () => {
+  let data = [
+    [1, 2],
+    [4, 5],
+    [7, 8],
+  ];
+  let mapped_data = [
+    [6, 16],
+    [36, 46],
+    [66, 76],
+  ];
+  let m = new Matrix(3, 2, data);
+
+  m = m.map(val => val - 1).mult(10).add(6);
+
+  expect(m).toEqual({
+    rows: 3,
+    cols: 2,
+    data: mapped_data,
+  });
+});
+
+test('Instance map with row and column params', () => {
+  const data = [
+    [1, 2],
+    [4, 5],
+    [7, 8],
+  ];
+  const mapped_data = [
+    [100, 201],
+    [410, 511],
+    [720, 821],
+  ];
+  let m = new Matrix(3, 2, deepcopy(data));
+
+  m.map((val, row, col) => val * 100 + row * 10 + col);
+
+  expect(m).toEqual({
+    rows: 3,
+    cols: 2,
+    data: mapped_data,
+  });
+});
+
+test('Static map with row and column params', () => {
+  const data = [
+    [1, 2],
+    [4, 5],
+    [7, 8],
+  ];
+  const mapped_data = [
+    [100, 201],
+    [410, 511],
+    [720, 821],
+  ];
+  let m = new Matrix(3, 2, deepcopy(data));
+
+  let mapped = Matrix.map(m, (val, row, col) => val * 100 + row * 10 + col);
+
+  expect(m).toEqual({
+    rows: 3,
+    cols: 2,
+    data: data,
+  });
+  expect(mapped).toEqual({
+    rows: 3,
+    cols: 2,
+    data: mapped_data,
+  });
+});
+
+test('error handling of addition when dimenstions of A and B does not match.', () => {
+  let m1 = new Matrix(1, 2);
+  let m2 = new Matrix(3, 4);
+  expect(() => {
+    m1.add(m2);
+  }).toThrow("Dimentions of matrixies should match");
+});
+
+test('error handling of substraction when dimenstions of A and B does not match.', () => {
+  let m1 = new Matrix(1, 2);
+  let m2 = new Matrix(3, 4);
+  expect(() => {
+    m1.sub(m2);
+  }).toThrow("Dimentions of matrixies should match");
+});
+
+test('error handling of Hadamard product when dimenstions of A and B does not match.', () => {
+  let m1 = new Matrix(1, 2);
+  let m2 = new Matrix(3, 4);
+  expect(() => {
+    m1.mult(m2);
+  }).toThrow("Dimentions of matrixies should match");
+});
+
+test('error handling of matrix product when dimenstions of A and B does not match.', () => {
+  let m1 = new Matrix(1, 2);
+  let m2 = new Matrix(3, 4);
+  expect(() => {
+    Matrix.mult(m1, m2);
+  }).toThrow("Dimentions of matrixies should match");
+});
