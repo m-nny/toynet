@@ -22,8 +22,6 @@ function setup() {
     let data = random(training_data);
     nn.train(data.inputs, data.targets);
   }
-  console.log(nn.feedforward([1, 0]));
-  console.log(nn.feedforward([0, 1]));
-  console.log(nn.feedforward([0, 0]));
-  console.log(nn.feedforward([1, 1]));
+  let outputs = training_data.map(data => nn.feedforward(data.inputs));
+  console.table(outputs);
 }

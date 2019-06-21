@@ -1,7 +1,7 @@
 {
   "name": "toy-net",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.0.1",
+  "main": "",
   "author": "Alibek Manabayev <Alibek.manabayev@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -9,5 +9,13 @@
   },
   "devDependencies": {
     "jest": "^24.8.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MannyFM/toynet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MannyFM/toynet/issues"
+  },
+  "homepage": "https://github.com/MannyFM/toynet#readme"
 }
