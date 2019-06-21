@@ -1,0 +1,13 @@
+{
+  "name": "toy-net",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Alibek Manabayev <Alibek.manabayev@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}
