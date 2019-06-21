@@ -5,10 +5,15 @@
   "author": "Alibek Manabayev <Alibek.manabayev@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "test": "jest"
   },
   "devDependencies": {
-    "jest": "^24.8.0"
+    "@types/jest": "^24.0.15",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
   },
   "repository": {
     "type": "git",

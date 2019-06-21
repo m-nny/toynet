@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "strict": true,
+    "outDir": "lib",
+    "declaration": true,
+    "declarationMap": true,
+    "moduleResolution": "node",
+  },
+  "include": [
+    "src"
+  ]
+}
