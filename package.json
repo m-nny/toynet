@@ -1,20 +1,28 @@
 {
   "name": "toy-net",
   "version": "0.0.1",
-  "main": "",
-  "author": "Alibek Manabayev <Alibek.manabayev@gmail.com>",
-  "license": "MIT",
-  "scripts": {
-    "build": "tsc",
-    "test": "jest"
-  },
+  "main": "dist/toynet.cjs.js",
+  "module": "dist/toynet.esm.js",
+  "browser": "dist/toynet.umd.js",
   "devDependencies": {
     "@types/jest": "^24.0.15",
     "jest": "^24.8.0",
+    "rollup": "^1.16.2",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.0.4",
+    "rollup-plugin-typescript2": "^0.21.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
+    "tslib": "^1.10.0",
     "typescript": "^3.5.2"
   },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "jest"
+  },
+  "author": "Alibek Manabayev <Alibek.manabayev@gmail.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MannyFM/toynet.git"

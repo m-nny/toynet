@@ -1,3 +1,7 @@
+const {
+  NeuralNetwork
+} = ToyNet;
+
 let training_data = [{
     inputs: [0, 1],
     targets: [1],
