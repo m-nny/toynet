@@ -1,6 +1,6 @@
 {
   "name": "toy-net",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/toynet.cjs.js",
   "module": "dist/toynet.esm.js",
   "browser": "dist/toynet.umd.js",
@@ -30,5 +30,6 @@
   "bugs": {
     "url": "https://github.com/MannyFM/toynet/issues"
   },
-  "homepage": "https://github.com/MannyFM/toynet#readme"
+  "homepage": "https://github.com/MannyFM/toynet#readme",
+  "private": true
 }
