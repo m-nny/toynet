@@ -1,4 +1,5 @@
 import Matrix from './matrix';
+import { randomGaussian } from './helper';
 
 class ActivationFunction {
   constructor(
@@ -24,7 +25,7 @@ class NeuralNetwork {
   private bias_o: Matrix;
 
   private activation_function = sigmoid;
-  private learning_rate = 0.1;
+  private learning_rate = 0.001;
 
   constructor(a: number, b: number, c: number);
   constructor(a: number, b: number, c: number,
@@ -128,7 +129,7 @@ class NeuralNetwork {
   mutate(rate: number): NeuralNetwork {
     let mutate = (val: number) => {
       if (Math.random() < rate) {
-        return Math.random() * 2 - 1;
+        return val + randomGaussian();
       } else {
         return val;
       }

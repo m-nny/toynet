@@ -1,6 +1,6 @@
 {
   "name": "toy-net",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
@@ -11,6 +11,7 @@
     "@types/jest": "^24.0.15",
     "jest": "^24.8.0",
     "mkdirp": "^0.5.1",
+    "publish-to-git": "^1.1.7",
     "rimraf": "^2.6.3",
     "rollup": "^1.16.2",
     "rollup-plugin-commonjs": "^10.0.0",
@@ -24,7 +25,10 @@
   "scripts": {
     "build": "rimraf dist && mkdirp dist && rollup -c",
     "dev": "rollup -c -w",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "$npm_execpath run build",
+    "prepublishOnly": "$npm_execpath test",
+    "publish": "publish-to-git"
   },
   "author": "Alibek Manabayev <Alibek.manabayev@gmail.com>",
   "license": "MIT",
