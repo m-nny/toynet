@@ -1,4 +1,4 @@
-dist
+dist*
 .rpt2_cache
 
 # Created by https://www.gitignore.io/api/node

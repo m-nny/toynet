@@ -1,21 +1,17 @@
 import Matrix from './matrix';
 
-function deepcopy(arr: number[][]): number[][] {
-  return arr.map(row => row.slice());
-}
-
 test('Mapping with instance map', () => {
-  const data = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const mapped_data = [
-    [-1, 2],
-    [3, -4],
-    [-5, 6],
-  ];
-  let m = new Matrix(3, 2, deepcopy(data));
+  const data = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const mapped_data = new Float32Array([
+    -1, 2,
+    3, -4,
+    -5, 6,
+  ]);
+  let m = new Matrix(3, 2, data);
   m.map(val => -val);
 
   expect(m).toEqual({
@@ -26,23 +22,23 @@ test('Mapping with instance map', () => {
 });
 
 test('Zipping with instance map', () => {
-  const data_a = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const data_b = [
-    [10, -20],
-    [-30, 40],
-    [50, -60],
-  ];
-  const zipped_data = [
-    [11, -22],
-    [-33, 44],
-    [55, -66],
-  ];
-  let a = new Matrix(3, 2, deepcopy(data_a));
-  let b = new Matrix(3, 2, deepcopy(data_b));
+  const data_a = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const data_b = new Float32Array([
+    10, -20,
+    -30, 40,
+    50, -60,
+  ]);
+  const zipped_data = new Float32Array([
+    11, -22,
+    -33, 44,
+    55, -66,
+  ]);
+  let a = new Matrix(3, 2, data_a);
+  let b = new Matrix(3, 2, data_b);
   a.zip(b, (x, y) => x + y);
 
   expect(a).toEqual({
@@ -58,19 +54,19 @@ test('Zipping with instance map', () => {
 });
 
 test('Making copy of matrix', () => {
-  const data = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const mapped_data = [
-    [1, 0],
-    [-3, 4],
-    [5, -6],
-  ];
-  let m = new Matrix(3, 2, deepcopy(data));
+  const data = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const mapped_data = new Float32Array([
+    0, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  let m = new Matrix(3, 2, data);
   let m_copy = m.copy();
-  m_copy.data[0][1] = 0;
+  m_copy.data[0] = 0;
   expect(m).toEqual({
     rows: 3,
     cols: 2,
@@ -84,17 +80,17 @@ test('Making copy of matrix', () => {
 });
 
 test('Mapping with static method', () => {
-  let data = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  let mapped_data = [
-    [-1, 2],
-    [3, -4],
-    [-5, 6],
-  ];
-  let m = new Matrix(3, 2, deepcopy(data));
+  let data = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  let mapped_data = new Float32Array([
+    -1, 2,
+    3, -4,
+    -5, 6,
+  ]);
+  let m = new Matrix(3, 2, data);
   let other = Matrix.map(m, (val => -val));
 
   expect(m).toEqual({
@@ -110,23 +106,23 @@ test('Mapping with static method', () => {
 });
 
 test('Zipping with static method', () => {
-  const data_a = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const data_b = [
-    [10, -20],
-    [-30, 40],
-    [50, -60],
-  ];
-  const zipped_data = [
-    [11, -22],
-    [-33, 44],
-    [55, -66],
-  ];
-  let a = new Matrix(3, 2, deepcopy(data_a));
-  let b = new Matrix(3, 2, deepcopy(data_b));
+  const data_a = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const data_b = new Float32Array([
+    10, -20,
+    -30, 40,
+    50, -60,
+  ]);
+  const zipped_data = new Float32Array([
+    11, -22,
+    -33, 44,
+    55, -66,
+  ]);
+  let a = new Matrix(3, 2, (data_a));
+  let b = new Matrix(3, 2, (data_b));
   let c = Matrix.zip(a, b, (x, y) => x + y);
 
   expect(a).toEqual({
@@ -147,12 +143,12 @@ test('Zipping with static method', () => {
 });
 
 test('Randmize matrix', () => {
-  const data = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  let a = new Matrix(3, 2, deepcopy(data));
+  const data = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  let a = new Matrix(3, 2, data);
   a.randomize();
 
   expect(a).toMatchObject({
@@ -163,17 +159,17 @@ test('Randmize matrix', () => {
 });
 
 test('Add scalar to matrix', () => {
-  const data = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const mapped_data = [
-    [2, -1],
-    [-2, 5],
-    [6, -5],
-  ];
-  let a = new Matrix(3, 2, deepcopy(data));
+  const data = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const mapped_data = new Float32Array([
+    2, -1,
+    -2, 5,
+    6, -5,
+  ]);
+  let a = new Matrix(3, 2, data);
   a.add(1);
 
   expect(a).toEqual({
@@ -185,23 +181,23 @@ test('Add scalar to matrix', () => {
 });
 
 test('Add matrix to matrix', () => {
-  const data_a = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const data_b = [
-    [10, -20],
-    [-30, 40],
-    [50, -60],
-  ];
-  const zipped_data = [
-    [11, -22],
-    [-33, 44],
-    [55, -66],
-  ];
-  let a = new Matrix(3, 2, deepcopy(data_a));
-  let b = new Matrix(3, 2, deepcopy(data_b));
+  const data_a = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const data_b = new Float32Array([
+    10, -20,
+    -30, 40,
+    50, -60,
+  ]);
+  const zipped_data = new Float32Array([
+    11, -22,
+    -33, 44,
+    55, -66,
+  ]);
+  let a = new Matrix(3, 2, (data_a));
+  let b = new Matrix(3, 2, (data_b));
   a.add(b);
 
   expect(a).toEqual({
@@ -217,23 +213,23 @@ test('Add matrix to matrix', () => {
 });
 
 test('Substract matrix from matrix', () => {
-  const data_a = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const data_b = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const zipped_data = [
-    [0, 0],
-    [0, 0],
-    [0, 0],
-  ];
-  let a = new Matrix(3, 2, deepcopy(data_a));
-  let b = new Matrix(3, 2, deepcopy(data_b));
+  const data_a = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const data_b = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const zipped_data = new Float32Array([
+    0, 0,
+    0, 0,
+    0, 0,
+  ]);
+  let a = new Matrix(3, 2, (data_a));
+  let b = new Matrix(3, 2, (data_b));
   a.sub(b);
 
   expect(a).toEqual({
@@ -263,17 +259,17 @@ test('Printing', () => {
 });
 
 test('Scalar product', () => {
-  const data_a = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const mapped_data = [
-    [10, -20],
-    [-30, 40],
-    [50, -60],
-  ];
-  let a = new Matrix(3, 2, deepcopy(data_a));
+  const data_a = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const mapped_data = new Float32Array([
+    10, -20,
+    -30, 40,
+    50, -60,
+  ]);
+  let a = new Matrix(3, 2, (data_a));
   a.mult(10);
 
   expect(a).toEqual({
@@ -284,23 +280,23 @@ test('Scalar product', () => {
 });
 
 test('Hadamard product', () => {
-  const data_a = [
-    [1, 2],
-    [3, 4],
-    [5, 6],
-  ];
-  const data_b = [
-    [7, 8],
-    [9, 10],
-    [11, 12],
-  ];
-  const mapped_data = [
-    [7, 16],
-    [27, 40],
-    [55, 72]
-  ];
-  let a = new Matrix(3, 2, deepcopy(data_a));
-  let b = new Matrix(3, 2, deepcopy(data_b));
+  const data_a = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const data_b = new Float32Array([
+    7, 8,
+    9, 10,
+    11, 12,
+  ]);
+  const mapped_data = new Float32Array([
+    7, -16,
+    -27, 40,
+    55, -72,
+  ]);
+  let a = new Matrix(3, 2, data_a);
+  let b = new Matrix(3, 2, data_b);
   a.mult(b);
 
   expect(a).toEqual({
@@ -316,26 +312,26 @@ test('Hadamard product', () => {
 });
 
 test('Matrix product', () => {
-  const data_a = [
-    [1, 2, 3],
-    [4, 5, 6],
-  ];
-  const data_b = [
-    [7, 8],
-    [9, 10],
-    [11, 12],
-  ];
-  const data_c = [
-    [58, 64],
-    [139, 154],
-  ];
-  const data_d = [
-    [39, 54, 69],
-    [49, 68, 87],
-    [59, 82, 105]
-  ];
-  let a = new Matrix(2, 3, deepcopy(data_a));
-  let b = new Matrix(3, 2, deepcopy(data_b));
+  const data_a = new Float32Array([
+    1, 2, 3,
+    4, 5, 6,
+  ]);
+  const data_b = new Float32Array([
+    7, 8,
+    9, 10,
+    11, 12,
+  ]);
+  const data_c = new Float32Array([
+    58, 64,
+    139, 154,
+  ]);
+  const data_d = new Float32Array([
+    39, 54, 69,
+    49, 68, 87,
+    59, 82, 105,
+  ]);
+  let a = new Matrix(2, 3, (data_a));
+  let b = new Matrix(3, 2, (data_b));
   let c = Matrix.mult(a, b);
   let d = Matrix.mult(b, a);
 
@@ -362,16 +358,16 @@ test('Matrix product', () => {
 });
 
 test('Transpose matrix', () => {
-  const data = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
-  const mapped_data = [
-    [1, -3, 5],
-    [-2, 4, -6],
-  ];
-  let a = new Matrix(3, 2, deepcopy(data));
+  const data = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
+  const mapped_data = new Float32Array([
+    1, -3, 5,
+    -2, 4, -6,
+  ]);
+  let a = new Matrix(3, 2, data);
   let b = Matrix.transpose(a);
 
   expect(a).toEqual({
@@ -388,7 +384,7 @@ test('Transpose matrix', () => {
 
 test('Matrix from Array', () => {
   const data = [1, -2, -3];
-  const mapped_data = [[1], [-2], [-3]];
+  const mapped_data = new Float32Array([1, -2, -3]);
   let m = Matrix.fromArray(data);
   expect(m).toEqual({
     rows: data.length,
@@ -398,13 +394,13 @@ test('Matrix from Array', () => {
 });
 
 test('Matrix to array', () => {
-  const data = [
-    [1, -2],
-    [-3, 4],
-    [5, -6],
-  ];
+  const data = new Float32Array([
+    1, -2,
+    -3, 4,
+    5, -6,
+  ]);
   const mapped_data = [1, -2, -3, 4, 5, -6,];
-  let a = new Matrix(3, 2, deepcopy(data));
+  let a = new Matrix(3, 2, data);
   let b = Matrix.toArray(a);
 
   expect(a).toEqual({
@@ -417,16 +413,16 @@ test('Matrix to array', () => {
 });
 
 test('Chaining matrix methods', () => {
-  let data = [
-    [1, 2],
-    [4, 5],
-    [7, 8],
-  ];
-  let mapped_data = [
-    [6, 16],
-    [36, 46],
-    [66, 76],
-  ];
+  let data = new Float32Array([
+    1, 2,
+    4, 5,
+    7, 8,
+  ]);
+  let mapped_data = new Float32Array([
+    6, 16,
+    36, 46,
+    66, 76,
+  ]);
   let m = new Matrix(3, 2, data);
 
   m = m.map(val => val - 1).mult(10).add(6);
@@ -439,17 +435,17 @@ test('Chaining matrix methods', () => {
 });
 
 test('Instance map with row and column params', () => {
-  const data = [
-    [1, 2],
-    [4, 5],
-    [7, 8],
-  ];
-  const mapped_data = [
-    [100, 201],
-    [410, 511],
-    [720, 821],
-  ];
-  let m = new Matrix(3, 2, deepcopy(data));
+  const data = new Float32Array([
+    1, 2,
+    4, 5,
+    7, 8,
+  ]);
+  const mapped_data = new Float32Array([
+    100, 201,
+    410, 511,
+    720, 821,
+  ]);
+  let m = new Matrix(3, 2, data);
 
   m.map((val, row, col) => val * 100 + row * 10 + col);
 
@@ -461,17 +457,17 @@ test('Instance map with row and column params', () => {
 });
 
 test('Static map with row and column params', () => {
-  const data = [
-    [1, 2],
-    [4, 5],
-    [7, 8],
-  ];
-  const mapped_data = [
-    [100, 201],
-    [410, 511],
-    [720, 821],
-  ];
-  let m = new Matrix(3, 2, deepcopy(data));
+  const data = new Float32Array([
+    1, 2,
+    4, 5,
+    7, 8,
+  ]);
+  const mapped_data = new Float32Array([
+    100, 201,
+    410, 511,
+    720, 821,
+  ]);
+  let m = new Matrix(3, 2, data);
 
   let mapped = Matrix.map(m, (val, row, col) => val * 100 + row * 10 + col);
 

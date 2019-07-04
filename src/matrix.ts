@@ -4,41 +4,53 @@ type Zipper = (a: number, b: number, i: number, j: number) => number;
 class Matrix {
   rows: number;
   cols: number;
-  data: number[][] = [];
-  constructor(a: number, b: number, data?: number[][]) {
-    this.rows = a;
-    this.cols = b;
-    if (data) {
-      this.data = data;
+  data: Float32Array;
+
+  constructor(rows: number, cols: number)
+  constructor(rows: number, cols: number, data: Float32Array)
+  constructor(rows: number, cols: number, data: number[])
+  constructor(rows: number, cols: number, data: number[][])
+  constructor(rows: number, cols: number, data?: Float32Array | number[][] | number[]) {
+    this.rows = rows;
+    this.cols = cols;
+    if (!data) {
+      this.data = new Float32Array(rows * cols);
+    } else if (data instanceof Float32Array) {
+      this.data = new Float32Array(data);
     } else {
-      for (let i = 0; i < this.rows; i++) {
-        this.data[i] = [];
-        for (let j = 0; j < this.cols; j++) {
-          this.data[i][j] = 0;
-        }
-      }
+      this.data = new Float32Array(([] as number[]).concat.apply([], data));
     }
   }
   map(func: Mapper): Matrix {
+    let i = 0, j = 0;
     this.data = this.data
-      .map((row, i) =>
-        row.map((value, j) =>
-          func(value, i, j)));
+      .map(value => {
+        if (j == this.cols) {
+          j = 0;
+          i++;
+        }
+        return func(value, i, j++);
+      });
     return this;
   }
   zip(other: Matrix, func: Zipper): Matrix {
     if (other.rows !== this.rows || other.cols !== this.cols) {
       throw new Error("Dimentions of matrixies should match");
     }
+    let i = 0, j = 0;
     this.data = this.data
-      .map((row, i) =>
-        row.map((value, j) =>
-          func(value, other.data[i][j], i, j)));
+      .map((value, idx) => {
+        j++;
+        if (j == this.cols) {
+          j = 0;
+          i++;
+        }
+        return func(value, other.data[idx], i, j);
+      });
     return this;
   }
   copy() {
-    let data_copy = this.data.map(row => row.map(val => val));
-    return new Matrix(this.rows, this.cols, data_copy);
+    return new Matrix(this.rows, this.cols, this.data);
   }
   static map(m: Matrix, func: Mapper): Matrix {
     return m.copy().map(func);
@@ -89,22 +101,27 @@ class Matrix {
     let result = new Matrix(a.rows, b.cols);
     for (let k = 0; k < a.cols; k++)
       for (let i = 0; i < result.rows; i++)
-        for (let j = 0; j < result.cols; j++)
-          result.data[i][j] += a.data[i][k] * b.data[k][j];
+        for (let j = 0; j < result.cols; j++) {
+          const ij = i * result.cols + j;
+          const ik = i * a.cols + k;
+          const kj = k * result.cols + j;
+          result.data[ij] += a.data[ik] * b.data[kj];
+        }
     return result;
   }
   static transpose(a: Matrix): Matrix {
     let transposed = new Matrix(a.cols, a.rows);
-    transposed.map((_, i, j) => a.data[j][i]);
+    transposed.map((_, i, j) => {
+      const ji = j * a.cols + i;
+      return a.data[ji];
+    });
     return transposed;
   }
   static fromArray(arr: number[]): Matrix {
-    return new Matrix(arr.length, 1).map((_, i) => arr[i]);
+    return new Matrix(arr.length, 1, [arr]);
   }
   static toArray(m: Matrix): number[] {
-    let result: number[] = [];
-    Matrix.map(m, val => result.push(val));
-    return result;
+    return Array.from(m.data);
   }
 }
 
