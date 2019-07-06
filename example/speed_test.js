@@ -1,4 +1,4 @@
-const n_input = 1000,
+const n_input = 900,
   n_hidden = 10000,
   n_output = 1000;
 
@@ -23,6 +23,7 @@ function test_feedforward(NN) {
     let end = process.hrtime(start);
     let elapsed = end[0] * 1000 + end[1] / 1000000;
     total_elapsed += elapsed;
+    // console.log(output);
     // console.log(elapsed.toFixed(3), 'ms');
   }
   total_elapsed /= repeats;
@@ -41,5 +42,6 @@ function test_feedforward(NN) {
   console.log('train mean: ', total_elapsed.toFixed(3), 'ms');
 }
 
-test_feedforward(require('../dist.old').NeuralNetwork);
-test_feedforward(require('../dist').NeuralNetwork);
+test_feedforward(require('../dist.purearray').NeuralNetwork);
+test_feedforward(require('../dist.float32').NeuralNetwork);
+test_feedforward(require('../dist.mathjs').NeuralNetwork);

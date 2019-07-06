@@ -1,5 +1,5 @@
-import Matrix from './matrix';
-import { randomGaussian } from './helper';
+import math, { Matrix } from 'mathjs';
+import { randomGaussian, randomMatrix } from './helper';
 
 class ActivationFunction {
   constructor(
@@ -40,92 +40,84 @@ class NeuralNetwork {
     this.hidden_nodes = b;
     this.output_nodes = c;
 
-    if (!weights_ih) {
-      this.weights_ih = new Matrix(this.hidden_nodes, this.input_nodes);
-      this.weights_ih.randomize();
-    } else {
-      this.weights_ih = weights_ih;
-    }
-    if (!weights_ho) {
-      this.weights_ho = new Matrix(this.output_nodes, this.hidden_nodes);
-      this.weights_ho.randomize();
-    } else {
-      this.weights_ho = weights_ho
-    }
-    if (!bias_h) {
-      this.bias_h = new Matrix(this.hidden_nodes, 1);
-      this.bias_h.randomize();
-    } else {
-      this.bias_h = bias_h
-    }
-    if (!bias_o) {
-      this.bias_o = new Matrix(this.output_nodes, 1);
-      this.bias_o.randomize();
-    } else {
-      this.bias_o = bias_o
-    }
+    this.weights_ih = (weights_ih && weights_ih.clone()) || randomMatrix(this.hidden_nodes, this.input_nodes)
+    this.weights_ho = (weights_ho && weights_ho.clone()) || randomMatrix(this.output_nodes, this.hidden_nodes);
+
+    this.bias_h = (bias_h && bias_h.clone()) || randomMatrix(this.hidden_nodes, 1);
+    this.bias_o = (bias_o && bias_o.clone()) || randomMatrix(this.output_nodes, 1);
   }
 
   feedforward(input_array: number[]): number[] {
-    let inputs = Matrix.fromArray(input_array);
+    if (input_array.length !== this.input_nodes) {
+      throw new Error("input_array shape must match input shape");
+    }
+    let inputs = math.matrix(input_array).resize([this.input_nodes, 1]);
 
-    let hidden = Matrix.mult(this.weights_ih, inputs);
-    hidden.add(this.bias_h);
-    hidden.map(this.activation_function.func);
+    let hidden: any = math.multiply(this.weights_ih, inputs);
+    hidden = math.add(hidden, this.bias_h);
+    hidden = math.map(hidden, this.activation_function.func);
 
-    let output = Matrix.mult(this.weights_ho, hidden);
-    output.add(this.bias_o);
-    output.map(this.activation_function.func);
+    let output: any = math.multiply(this.weights_ho, hidden);
+    output = math.add(output, this.bias_o);
+    output = math.map(output, this.activation_function.func);
 
-    return Matrix.toArray(output);
+    return output.toArray();
   }
 
   train(input_array: number[], target_array: number[]): void {
-    let inputs = Matrix.fromArray(input_array);
-    let targets = Matrix.fromArray(target_array);
-    let hidden = Matrix.mult(this.weights_ih, inputs);
-    hidden.add(this.bias_h);
-    hidden.map(this.activation_function.func);
+    if (input_array.length !== this.input_nodes) {
+      throw new Error("input_array shape must match input shape");
+    }
+    if (target_array.length !== this.output_nodes) {
+      throw new Error("target_array shape must match output shape");
+    }
+    let inputs = math.matrix(input_array).resize([this.input_nodes, 1]);
+    let targets = math.matrix(target_array).resize([this.output_nodes, 1])
+    let hidden: any = math.multiply(this.weights_ih, inputs);
+    hidden = math.add(hidden, this.bias_h);
+    hidden = math.map(hidden, this.activation_function.func);
 
-    let outputs = Matrix.mult(this.weights_ho, hidden);
-    outputs.add(this.bias_o);
-    outputs.map(this.activation_function.func);
+    let outputs: any = math.multiply(this.weights_ho, hidden);
+    outputs = math.add(outputs, this.bias_o);
+    outputs = math.map(outputs, this.activation_function.func);
 
-    let output_errors = targets.sub(outputs);
+    let output_errors = math.subtract(targets, outputs);
     // Calculate gradient
-    let gradients = Matrix.map(outputs, this.activation_function.dfunc);
-    gradients.mult(output_errors);
-    gradients.mult(this.learning_rate);
+    let gradients: any = math.map(outputs, this.activation_function.dfunc);
+    gradients = math.dotMultiply(gradients, output_errors);
+    gradients = math.dotMultiply(gradients, this.learning_rate);
 
     // Calculate deltas
-    let hidden_t = Matrix.transpose(hidden);
-    let weights_ho_deltas = Matrix.mult(gradients, hidden_t);
+    let hidden_t = math.transpose(hidden);
+    let weights_ho_deltas = math.multiply(gradients, hidden_t);
 
-    this.weights_ho.add(weights_ho_deltas);
-    this.bias_o.add(gradients);
+    this.weights_ho = math.add(this.weights_ho, weights_ho_deltas) as Matrix;
+    this.bias_o = math.add(this.bias_o, gradients) as Matrix;
 
-    let who_t = Matrix.transpose(this.weights_ho);
-    let hidden_errors = Matrix.mult(who_t, output_errors);
+    let who_t = math.transpose(this.weights_ho);
+    let hidden_errors = math.multiply(who_t, output_errors);
 
     // Calculate hidden gradient
-    let hidden_gradient = Matrix.map(hidden, this.activation_function.dfunc);
-    hidden_gradient.mult(hidden_errors);
-    hidden_gradient.mult(this.learning_rate);
+    let hidden_gradient: any = math.map(hidden, this.activation_function.dfunc);
+    hidden_gradient = math.dotMultiply(hidden_gradient, hidden_errors);
+    hidden_gradient = math.dotMultiply(hidden_gradient, this.learning_rate);
 
     // Calculate input->hidden deltas
-    let inputs_t = Matrix.transpose(inputs);
-    let weights_ih_deltas = Matrix.mult(hidden_gradient, inputs_t);
+    let inputs_t = math.transpose(inputs);
+    let weights_ih_deltas = math.multiply(hidden_gradient, inputs_t);
 
-    this.weights_ih.add(weights_ih_deltas);
-    this.bias_h.add(hidden_gradient);
+    this.weights_ih = math.add(this.weights_ih, weights_ih_deltas) as Matrix;
+    this.bias_h = math.add(this.bias_h, hidden_gradient) as Matrix;
   }
+
   copy(): NeuralNetwork {
     return new NeuralNetwork(
       this.input_nodes, this.hidden_nodes, this.output_nodes,
-      this.weights_ih.copy(), this.weights_ho.copy(),
-      this.bias_h.copy(), this.bias_o.copy()
+      this.weights_ih, this.weights_ho,
+      this.bias_h, this.bias_o
     );
   }
+
   mutate(rate: number): NeuralNetwork {
     let mutate = (val: number) => {
       if (Math.random() < rate) {

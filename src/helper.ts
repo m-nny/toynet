@@ -1,3 +1,5 @@
+import math, { Matrix } from "mathjs";
+
 let previous = false, y2 = 0;
 
 export function randomGaussian(mean?: number, std?: number): number {
@@ -24,3 +26,9 @@ export function randomGaussian(mean?: number, std?: number): number {
   var s = std || 1;
   return y1 * s + m;
 };
+
+export function randomMatrix(rows: number, cols: number): Matrix {
+  const result = (math.zeros(rows, cols) as Matrix)
+    .map(_ => math.random());
+  return result;
+}

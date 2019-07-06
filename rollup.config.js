@@ -25,11 +25,13 @@ export default [{
     output: {
       name: 'ToyNet',
       file: pkg.browser,
-      format: 'umd'
+      format: 'umd',
+      globals: {
+        'mathjs': 'math'
+      }
     },
     external: [
-      ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.devDependencies || {})
+      'mathjs'
     ],
     plugins: [
       resolve(),
